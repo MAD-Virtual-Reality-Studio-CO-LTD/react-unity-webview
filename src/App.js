@@ -7,15 +7,15 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Unity Messenger
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="uniwebview://messageFromWeb?msg=Hello" //unitywebview://{Path}?{Args} example:uniwebview://action?key=value&anotherKey=anotherValue
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Say hello to Unity
         </a>
       </header>
     </div>
