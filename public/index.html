@@ -43,7 +43,7 @@
         } a && e.render.apply(e, a), h && e.destroy.apply(e, h); for (n = 0; n < u.length; n++)e.on.apply(e, u[n])
       };
       var n = new XMLHttpRequest; n.addEventListener("load", t), n.open("GET", "https://" + e + ".webloader.smooch.io/", !0), n.responseType = "json", n.send()
-    }(window, document, "Smooch", "60e2f9bff75ba200d39b2acd", "5");
+    }(window, document, "Smooch", "6212f7786cd79200ed4a1448", "5");
   </script>
 </head>
 
@@ -67,11 +67,11 @@
     const embeddedValue = params["embedded"] != null ? true : false;
 
     if(embeddedValue) {
-      Smooch.render(document.getElementById('chat-container'));  
+      Smooch.render(document.getElementById('chat-container'));
     }
 
-    Smooch.init({ 
-      integrationId: '60e2f9bff75ba200d39b2acd',
+    Smooch.init({
+      integrationId: '6212f7786cd79200ed4a1448',
       businessName: "KPI",
       canUserCreateMoreConversations: false,
       canUserSeeConversationList: false,
@@ -140,7 +140,7 @@
       svgFullscreen.style.height = "100%";
       svgFullscreen.style.display = "flex";
       svgFullscreen.style.justifyContent = "center";
-      
+
       var imgFullscreen = document.createElement("img");
       imgFullscreen.style.width = "65%";
       imgFullscreen.style.height = "65%";
@@ -148,7 +148,7 @@
 
       svgFullscreen.appendChild(imgFullscreen);
       fullscreenBtn.appendChild(svgFullscreen);
-      
+
       if(embeddedValue == false) {
         imgFullscreen.src = 'https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/icon_fullscreen.svg';
       } else {
@@ -165,7 +165,7 @@
       fullscreenBtn.style.margin = "auto 0 auto 8px"
 
 
-      fullscreenBtn.onclick = function() { 
+      fullscreenBtn.onclick = function() {
         const key = "embedded";
         const value = "true";
         const uri = window.location.href;
@@ -181,11 +181,11 @@
           }
         } else {
             window.location.href = uri + separator + key + "=" + value;
-        } 
+        }
       };
       header.insertBefore(fullscreenBtn, header.children[2]);
 
-  
+
       // var wrapper = iframe.contentWindow.document.getElementById("wrapper");
       // wrapper.style.width = wrapper.offsetWidth + ((wrapper.offsetWidth * 40) / 100) + "px";
       // wrapper.style.height = wrapper.offsetHeight + ((wrapper.offsetHeight * 20) / 100) + "px";
