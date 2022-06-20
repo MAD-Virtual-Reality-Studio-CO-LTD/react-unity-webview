@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -24,12 +21,36 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <title>KPI</title>
+  <script>
+    !function (o, p, s, e, c) {
+      var i, a, h, u = [], d = []; function t() {
+        var t = "You must provide a supported major version."; try {
+          if (!c) throw new Error(t); var e, n = "https://cdn.smooch.io/", r = "smooch";
+          if ((e = "string" == typeof this.response ? JSON.parse(this.response) : this.response).url) {
+            var o = p.getElementsByTagName("script")[0], s = p.createElement("script"); s.async = !0;
+            var i = c.match(/([0-9]+).?([0-9]+)?.?([0-9]+)?/), a = i && i[1]; if (i && i[3]) s.src = n + r + "." + c + ".min.js"; else { if (!(4 <= a && e["v" + a])) throw new Error(t); s.src = e["v" + a] } o.parentNode.insertBefore(s, o)
+          }
+        } catch (e) { e.message === t && console.error(e) }
+      } o[s] = {
+        init: function () {
+          i = arguments; var t = { then: function (e) { return d.push({ type: "t", next: e }), t }, catch: function (e) { return d.push({ type: "c", next: e }), t } };
+          return t
+        }, on: function () { u.push(arguments) }, render: function () { a = arguments }, destroy: function () { h = arguments }
+      }, o.__onWebMessengerHostReady__ = function (e) {
+        if (delete o.__onWebMessengerHostReady__, o[s] = e, i) for (var t = e.init.apply(e, i), n = 0; n < d.length; n++) {
+          var r = d[n]; t = "t" === r.type ? t.then(r.next) : t.catch(r.next)
+        } a && e.render.apply(e, a), h && e.destroy.apply(e, h); for (n = 0; n < u.length; n++)e.on.apply(e, u[n])
+      };
+      var n = new XMLHttpRequest; n.addEventListener("load", t), n.open("GET", "https://" + e + ".webloader.smooch.io/", !0), n.responseType = "json", n.send()
+    }(window, document, "Smooch", "60e2f9bff75ba200d39b2acd", "5");
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <div id="chat-container" style="position:absolute; top:0; bottom: 0; left: 0; right: 0; z-index: 1;"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -39,5 +60,153 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+  <script>
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const embeddedValue = params["embedded"] != null ? true : false;
+
+    if(embeddedValue) {
+      Smooch.render(document.getElementById('chat-container'));  
+    }
+
+    Smooch.init({ 
+      integrationId: '60e2f9bff75ba200d39b2acd',
+      businessName: "KPI",
+      canUserCreateMoreConversations: false,
+      canUserSeeConversationList: false,
+      embedded: embeddedValue,
+    }).then(
+    function() {
+      console.log("Init done");
+      Smooch.open();
+
+      var iframe = document.getElementById("web-messenger-container");
+
+      // var elmnt = iframe.contentWindow.document.getElementsByClassName("btn-primary");
+
+      // for (let index = 0; index < elmnt.length; index++) {
+      //   const element = elmnt[index];
+      //   element.style.backgroundColor = "red";
+      //   element.style.borderColor = "red";
+      // }
+
+      var introPaneElmnt = iframe.contentWindow.document.getElementsByClassName("intro-pane");
+      introPaneElmnt[0].style.display = "none";
+
+      var logoElement = iframe.contentWindow.document.getElementsByClassName("logo");
+      logoElement[0].style.display = "none";
+
+      var backgroundElement = iframe.contentWindow.document.getElementById("conversation");
+      backgroundElement.style.backgroundImage = "url('https://i.imgur.com/8oZVbOR.png')";
+      backgroundElement.style.backgroundRepeat = "no-repeat";
+      backgroundElement.style.backgroundAttachment = "fixed";
+      backgroundElement.style.backgroundPosition = "center";
+      backgroundElement.style.backgroundSize = "contain";
+
+      var messages = iframe.contentWindow.document.getElementsByClassName("msg");
+      var messageBoxes = iframe.contentWindow.document.getElementsByClassName("message-item");
+      var messagesText = iframe.contentWindow.document.getElementsByClassName("message-text");
+
+      for (let index = 0; index < messages.length; index++) {
+        const msg = messages[index];
+        msg.style.maxWidth = "80%";
+      }
+
+      for (let index = 0; index < messageBoxes.length; index++) {
+        const messageBox = messageBoxes[index];
+        messageBox.style.maxWidth = "100%";
+
+        var paddingTopString = window.getComputedStyle(messageBox, null).getPropertyValue('padding-top');
+        var paddingTop = parseInt(paddingTopString, 10);
+        messageBox.style.paddingTop = paddingTop + ((paddingTop * 60) / 100) + "px";
+
+        var paddingBottomString = window.getComputedStyle(messageBox, null).getPropertyValue('padding-bottom');
+        var paddingBottom = parseInt(paddingBottomString, 10);
+        messageBox.style.paddingBottom = paddingBottom + ((paddingBottom * 60) / 100) + "px";
+      }
+
+      for (let index = 0; index < messagesText.length; index++) {
+        const messageText = messagesText[index];
+        messageText.style.width = "95%";
+      }
+
+      var header = iframe.contentWindow.document.getElementById("header");
+
+      var fullscreenBtn = document.createElement("div");
+      var svgFullscreen = document.createElement("svg");
+
+      svgFullscreen.style.width = "100%";
+      svgFullscreen.style.height = "100%";
+      svgFullscreen.style.display = "flex";
+      svgFullscreen.style.justifyContent = "center";
+      
+      var imgFullscreen = document.createElement("img");
+      imgFullscreen.style.width = "65%";
+      imgFullscreen.style.height = "65%";
+      imgFullscreen.style.margin = "auto";
+
+      svgFullscreen.appendChild(imgFullscreen);
+      fullscreenBtn.appendChild(svgFullscreen);
+      
+      if(embeddedValue == false) {
+        imgFullscreen.src = 'https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/icon_fullscreen.svg';
+      } else {
+        imgFullscreen.src = 'https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/icon_minimize.svg';
+      }
+      fullscreenBtn.className = "fullscreenBtn";
+      fullscreenBtn.style.backgroundPosition = "center";
+      fullscreenBtn.style.backgroundSize = "contain";
+      fullscreenBtn.style.display = "flex";
+      fullscreenBtn.style.cursor = "pointer";
+      fullscreenBtn.style.height = "32px";
+      fullscreenBtn.style.minWidth = "32px";
+      fullscreenBtn.style.padding = "4px";
+      fullscreenBtn.style.margin = "auto 0 auto 8px"
+
+
+      fullscreenBtn.onclick = function() { 
+        const key = "embedded";
+        const value = "true";
+        const uri = window.location.href;
+
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+
+        if (uri.match(re)) {
+          if(embeddedValue == false) {
+            window.location.href = uri.replace(re, '$1' + key + "=" + value + '$2');
+          } else {
+            window.location.href = uri.replace(re, "");
+          }
+        } else {
+            window.location.href = uri + separator + key + "=" + value;
+        } 
+      };
+      header.insertBefore(fullscreenBtn, header.children[2]);
+
+  
+      // var wrapper = iframe.contentWindow.document.getElementById("wrapper");
+      // wrapper.style.width = wrapper.offsetWidth + ((wrapper.offsetWidth * 40) / 100) + "px";
+      // wrapper.style.height = wrapper.offsetHeight + ((wrapper.offsetHeight * 20) / 100) + "px";
+    },
+    function(err) {
+        console.log(err);
+        // Something went wrong during initialization
+    });
+
+    Smooch.on('message:received', function (message, data) {
+      // var iframe = document.getElementById("web-messenger-container");
+      //   // var elmnt = iframe.contentWindow.document.getElementsByTagName("H1")[0];
+      //   var elmnt = iframe.contentWindow.document.getElementsByClassName("btn-primary");
+
+      //   for (let index = 0; index < elmnt.length; index++) {
+      //     const element = elmnt[index];
+      //     element.style.backgroundColor = "red";
+      //     element.style.borderColor = "red";
+      //   }
+    });
+  </script>
+</body>
+
 </html>
