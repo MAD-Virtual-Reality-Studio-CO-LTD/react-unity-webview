@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
   <meta name="theme-color" content="#000000" />
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <!--
@@ -21,6 +22,8 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+  <title>KPI</title>
+
   <title>KPI</title>
   <script>
     !function (o, p, s, e, c) {
@@ -64,7 +67,7 @@
 
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
-    const embeddedValue = params["embedded"] != null ? true : false;
+    const embeddedValue = params["embedded"] != null;
 
     if(embeddedValue) {
       Smooch.render(document.getElementById('chat-container'));
@@ -108,13 +111,11 @@
       var messageBoxes = iframe.contentWindow.document.getElementsByClassName("message-item");
       var messagesText = iframe.contentWindow.document.getElementsByClassName("message-text");
 
-      for (let index = 0; index < messages.length; index++) {
-        const msg = messages[index];
+      for (const msg of messages) {
         msg.style.maxWidth = "80%";
       }
 
-      for (let index = 0; index < messageBoxes.length; index++) {
-        const messageBox = messageBoxes[index];
+      for (const messageBox of messageBoxes) {
         messageBox.style.maxWidth = "100%";
 
         var paddingTopString = window.getComputedStyle(messageBox, null).getPropertyValue('padding-top');
@@ -126,8 +127,7 @@
         messageBox.style.paddingBottom = paddingBottom + ((paddingBottom * 60) / 100) + "px";
       }
 
-      for (let index = 0; index < messagesText.length; index++) {
-        const messageText = messagesText[index];
+      for (const messageText of messagesText) {
         messageText.style.width = "95%";
       }
 
@@ -149,11 +149,8 @@
       svgFullscreen.appendChild(imgFullscreen);
       fullscreenBtn.appendChild(svgFullscreen);
 
-      if(embeddedValue == false) {
-        imgFullscreen.src = 'https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/icon_fullscreen.svg';
-      } else {
-        imgFullscreen.src = 'https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/icon_minimize.svg';
-      }
+      imgFullscreen.src = "https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/" + (embeddedValue ? 'icon_minimize.svg' : 'icon_fullscreen.svg');
+
       fullscreenBtn.className = "fullscreenBtn";
       fullscreenBtn.style.backgroundPosition = "center";
       fullscreenBtn.style.backgroundSize = "contain";
@@ -168,19 +165,11 @@
       fullscreenBtn.onclick = function() {
         const key = "embedded";
         const value = "true";
-        const uri = window.location.href;
-
-        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-
-        if (uri.match(re)) {
-          if(embeddedValue == false) {
-            window.location.href = uri.replace(re, '$1' + key + "=" + value + '$2');
-          } else {
-            window.location.href = uri.replace(re, "");
-          }
-        } else {
-            window.location.href = uri + separator + key + "=" + value;
+        var url = new URL(window.location.href);
+        if(url.searchParams.get(key) != value)
+        {
+          url.searchParams.set(key,value);
+          window.location.href = url.toString();
         }
       };
       header.insertBefore(fullscreenBtn, header.children[2]);
