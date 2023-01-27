@@ -24,35 +24,55 @@
     -->
   <title>KPI</title>
 
-  <title>KPI</title>
-  <script>
-    !function (o, p, s, e, c) {
-      var i, a, h, u = [], d = []; function t() {
-        var t = "You must provide a supported major version."; try {
-          if (!c) throw new Error(t); var e, n = "https://cdn.smooch.io/", r = "smooch";
-          if ((e = "string" == typeof this.response ? JSON.parse(this.response) : this.response).url) {
-            var o = p.getElementsByTagName("script")[0], s = p.createElement("script"); s.async = !0;
-            var i = c.match(/([0-9]+).?([0-9]+)?.?([0-9]+)?/), a = i && i[1]; if (i && i[3]) s.src = n + r + "." + c + ".min.js"; else { if (!(4 <= a && e["v" + a])) throw new Error(t); s.src = e["v" + a] } o.parentNode.insertBefore(s, o)
-          }
-        } catch (e) { e.message === t && console.error(e) }
-      } o[s] = {
-        init: function () {
-          i = arguments; var t = { then: function (e) { return d.push({ type: "t", next: e }), t }, catch: function (e) { return d.push({ type: "c", next: e }), t } };
-          return t
-        }, on: function () { u.push(arguments) }, render: function () { a = arguments }, destroy: function () { h = arguments }
-      }, o.__onWebMessengerHostReady__ = function (e) {
-        if (delete o.__onWebMessengerHostReady__, o[s] = e, i) for (var t = e.init.apply(e, i), n = 0; n < d.length; n++) {
-          var r = d[n]; t = "t" === r.type ? t.then(r.next) : t.catch(r.next)
-        } a && e.render.apply(e, a), h && e.destroy.apply(e, h); for (n = 0; n < u.length; n++)e.on.apply(e, u[n])
-      };
-      var n = new XMLHttpRequest; n.addEventListener("load", t), n.open("GET", "https://" + e + ".webloader.smooch.io/", !0), n.responseType = "json", n.send()
-    }(window, document, "Smooch", "6212f7786cd79200ed4a1448", "5");
-  </script>
+  <style>
+    df-messenger {
+     --df-messenger-bot-message: #878fac;
+     --df-messenger-button-titlebar-color: rgb(0, 105, 92);
+     --df-messenger-chat-background-color: #fafafa;
+     --df-messenger-font-color: white;
+     --df-messenger-send-icon: #878fac;
+     --df-messenger-user-message: #479b3d;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #root {
+      width: 100%;
+      height: 100%;
+    }
+
+    #background {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    code {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+    }
+
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
-  <div id="chat-container" style="position:absolute; top:0; bottom: 0; left: 0; right: 0; z-index: 1;"></div>
+  <div id="root">
+    <img id="background" src="/images/chatbot-01.png" alt="background">
+  </div>
+
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <df-messenger intent="WELCOME" chat-title="KPI" agent-id="281b14de-f968-44c1-b590-190d233de6df" language-code="th" expand="true"></df-messenger>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -64,136 +84,102 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   <script>
+    var dfMessenger = document.querySelector('df-messenger');
+    dfMessenger.addEventListener('df-messenger-loaded',  function (event) {
+        var wrapper = dfMessenger.shadowRoot.querySelector('.df-messenger-wrapper');
+        wrapper.querySelector('#widgetIcon').style.display = "none";
 
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(urlSearchParams.entries());
-    const embeddedValue = params["embedded"] != null;
+        var backgroundElement = wrapper.querySelector('df-messenger-chat').shadowRoot.querySelector("df-message-list");
+        backgroundElement.style.backgroundImage = "url('https://i.imgur.com/8oZVbOR.png')";
+        backgroundElement.style.backgroundRepeat = "no-repeat";
+        backgroundElement.style.backgroundAttachment = "fixed";
+        backgroundElement.style.backgroundPosition = "center";
+        backgroundElement.style.backgroundSize = "contain";
+    });
+    
+    dfMessenger.addEventListener('df-response-received',function(event) {
+      console.log(event);
 
-    if(embeddedValue) {
-      Smooch.render(document.getElementById('chat-container'));
-    }
-
-    Smooch.init({
-      integrationId: '6212f7786cd79200ed4a1448',
-      businessName: "KPI",
-      canUserCreateMoreConversations: false,
-      canUserSeeConversationList: false,
-      embedded: embeddedValue,
-    }).then(
-    function() {
-      console.log("Init done");
-      Smooch.open();
-
-      var iframe = document.getElementById("web-messenger-container");
-
-      // var elmnt = iframe.contentWindow.document.getElementsByClassName("btn-primary");
-
-      // for (let index = 0; index < elmnt.length; index++) {
-      //   const element = elmnt[index];
-      //   element.style.backgroundColor = "red";
-      //   element.style.borderColor = "red";
-      // }
-
-      var introPaneElmnt = iframe.contentWindow.document.getElementsByClassName("intro-pane");
-      introPaneElmnt[0].style.display = "none";
-
-      var logoElement = iframe.contentWindow.document.getElementsByClassName("logo");
-      logoElement[0].style.display = "none";
-
-      var backgroundElement = iframe.contentWindow.document.getElementById("conversation");
-      backgroundElement.style.backgroundImage = "url('https://i.imgur.com/8oZVbOR.png')";
-      backgroundElement.style.backgroundRepeat = "no-repeat";
-      backgroundElement.style.backgroundAttachment = "fixed";
-      backgroundElement.style.backgroundPosition = "center";
-      backgroundElement.style.backgroundSize = "contain";
-
-      var messages = iframe.contentWindow.document.getElementsByClassName("msg");
-      var messageBoxes = iframe.contentWindow.document.getElementsByClassName("message-item");
-      var messagesText = iframe.contentWindow.document.getElementsByClassName("message-text");
-
-      for (const msg of messages) {
-        msg.style.maxWidth = "80%";
-      }
-
-      for (const messageBox of messageBoxes) {
-        messageBox.style.maxWidth = "100%";
-
-        var paddingTopString = window.getComputedStyle(messageBox, null).getPropertyValue('padding-top');
-        var paddingTop = parseInt(paddingTopString, 10);
-        messageBox.style.paddingTop = paddingTop + ((paddingTop * 60) / 100) + "px";
-
-        var paddingBottomString = window.getComputedStyle(messageBox, null).getPropertyValue('padding-bottom');
-        var paddingBottom = parseInt(paddingBottomString, 10);
-        messageBox.style.paddingBottom = paddingBottom + ((paddingBottom * 60) / 100) + "px";
-      }
-
-      for (const messageText of messagesText) {
-        messageText.style.width = "95%";
-      }
-
-      var header = iframe.contentWindow.document.getElementById("header");
-
-      var fullscreenBtn = document.createElement("div");
-      var svgFullscreen = document.createElement("svg");
-
-      svgFullscreen.style.width = "100%";
-      svgFullscreen.style.height = "100%";
-      svgFullscreen.style.display = "flex";
-      svgFullscreen.style.justifyContent = "center";
-
-      var imgFullscreen = document.createElement("img");
-      imgFullscreen.style.width = "65%";
-      imgFullscreen.style.height = "65%";
-      imgFullscreen.style.margin = "auto";
-
-      svgFullscreen.appendChild(imgFullscreen);
-      fullscreenBtn.appendChild(svgFullscreen);
-
-      imgFullscreen.src = "https://s3.ap-southeast-1.amazonaws.com/madvrstudio.com/" + (embeddedValue ? 'icon_minimize.svg' : 'icon_fullscreen.svg');
-
-      fullscreenBtn.className = "fullscreenBtn";
-      fullscreenBtn.style.backgroundPosition = "center";
-      fullscreenBtn.style.backgroundSize = "contain";
-      fullscreenBtn.style.display = "flex";
-      fullscreenBtn.style.cursor = "pointer";
-      fullscreenBtn.style.height = "32px";
-      fullscreenBtn.style.minWidth = "32px";
-      fullscreenBtn.style.padding = "4px";
-      fullscreenBtn.style.margin = "auto 0 auto 8px"
-
-
-      fullscreenBtn.onclick = function() {
-        const key = "embedded";
-        const value = "true";
-        var url = new URL(window.location.href);
-        if(url.searchParams.get(key) != value)
+      /** @type { { payload: { responses: { type: string,text: string,actions:{ type:string,payload:string,text:string,uri?:string }[] }[] } }[] } */
+      var messages = event.detail.response.queryResult.fulfillmentMessages;
+      console.log(messages);
+      for (const message of messages) {
+        if(message.platform)
+          continue;
+  
+        if(message?.payload?.responses?.length > 0)
         {
-          url.searchParams.set(key,value);
-          window.location.href = url.toString();
+          for (const response of message.payload.responses) {
+            if(response.type == "text" && response.text)
+              dfMessenger.renderCustomText(response.text);
+
+            if(response.actions?.length > 0)
+            {
+              dfMessenger.renderCustomCard(
+                response.actions.map((action) => {
+                  return {
+                    "type": "button",
+                    "icon": {
+                      "type": "chevron_right",
+                      "color": "#FF9800"
+                    },
+                    "text": action.text,
+                    "link": action.uri || undefined,
+                    "event": action.payload ? {
+                      "name": action.payload,
+                      "languageCode": "th"
+                    } : undefined
+                  };
+                })
+              );
+            }
+            
+            if(response.items?.length > 0)
+            {
+              dfMessenger.renderCustomCard(response.items.flatMap((item) => {
+                return [
+                  item.title ? {
+                    "type": "info",
+                    "title": item.title
+                  } : null,
+                  ...item.actions.map((action) => {
+                    return {
+                      "type": "button",
+                      "icon": {
+                        "type": "chevron_right",
+                        "color": "#FF9800"
+                      },
+                      "text": action.text,
+                      "link": action.uri || ""
+                    };
+                  })
+                ].filter((node) => node)
+              }));
+            }
+          }
         }
-      };
-      header.insertBefore(fullscreenBtn, header.children[2]);
-
-
-      // var wrapper = iframe.contentWindow.document.getElementById("wrapper");
-      // wrapper.style.width = wrapper.offsetWidth + ((wrapper.offsetWidth * 40) / 100) + "px";
-      // wrapper.style.height = wrapper.offsetHeight + ((wrapper.offsetHeight * 20) / 100) + "px";
-    },
-    function(err) {
-        console.log(err);
-        // Something went wrong during initialization
+      }
     });
 
-    Smooch.on('message:received', function (message, data) {
-      // var iframe = document.getElementById("web-messenger-container");
-      //   // var elmnt = iframe.contentWindow.document.getElementsByTagName("H1")[0];
-      //   var elmnt = iframe.contentWindow.document.getElementsByClassName("btn-primary");
+    dfMessenger.addEventListener('df-button-clicked',function(event) {
+      if(event.detail.element.event || event.detail.element.link)
+        return;
+      
+      dfMessenger.renderCustomCard([
+        {
+          "type": "chips",
+          "options": [
+            {
+              "text": event.detail.element.text
+            }
+          ]
+        }
+      ]);
 
-      //   for (let index = 0; index < elmnt.length; index++) {
-      //     const element = elmnt[index];
-      //     element.style.backgroundColor = "red";
-      //     element.style.borderColor = "red";
-      //   }
+      var messageList = dfMessenger.shadowRoot.querySelector("df-messenger-chat").shadowRoot.querySelector("df-message-list").shadowRoot;
+      var chips = [...messageList.querySelectorAll("df-chips")].flatMap((chips) => [...chips.shadowRoot.querySelectorAll(".df-chips-wrapper>a")]).filter((a) => a.innerHTML.indexOf(event.detail.element.text) > -1);
+      if(chips.length > 0)
+        chips[chips.length - 1].click();
     });
   </script>
 </body>
